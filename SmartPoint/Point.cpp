@@ -50,7 +50,6 @@ void Point::sendStruct()
 		BUF_SIZE);
 	CopyMemory((PVOID)pBuf, val, sizeof(Values));
 	UnmapViewOfFile(pBuf);
-	CloseHandle(hMapFile);
 }
 
 void Point::getStruct()
@@ -65,7 +64,6 @@ void Point::getStruct()
 		BUF_SIZE);
 	CopyMemory(val, (PVOID)pBuf, sizeof(Values));
 	UnmapViewOfFile(pBuf);
-	CloseHandle(hMapFile);
 }
 
 double Point::getX() {
