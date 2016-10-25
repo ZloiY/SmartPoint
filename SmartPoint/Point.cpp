@@ -14,6 +14,9 @@ Point::Point()
 		0,
 		BUF_SIZE,
 		szName);
+	hMapFile = OpenFileMapping(FILE_MAP_ALL_ACCESS,
+		FALSE,
+		szName);
 }
 
 Point::Point(double x, double y)
@@ -28,6 +31,9 @@ Point::Point(double x, double y)
 		0,
 		BUF_SIZE,
 		szName);
+	hMapFile = OpenFileMapping(FILE_MAP_ALL_ACCESS,
+		FALSE,
+		szName);
 }
 
 void Point::setX(double x) {
@@ -40,9 +46,6 @@ void Point::setY(double y) {
 
 void Point::sendStruct()
 {
-	hMapFile = OpenFileMapping(FILE_MAP_ALL_ACCESS,
-		FALSE,
-		szName);
 	pBuf = (LPTSTR)MapViewOfFile(hMapFile,
 		FILE_MAP_ALL_ACCESS,
 		0,
@@ -50,13 +53,11 @@ void Point::sendStruct()
 		BUF_SIZE);
 	CopyMemory((PVOID)pBuf, val, sizeof(Values));
 	UnmapViewOfFile(pBuf);
+
 }
 
 void Point::getStruct()
 {
-	hMapFile = OpenFileMapping(FILE_MAP_ALL_ACCESS,
-		FALSE,
-		szName);
 	pBuf = (LPTSTR)MapViewOfFile(hMapFile,
 		FILE_MAP_ALL_ACCESS,
 		0,
@@ -64,6 +65,7 @@ void Point::getStruct()
 		BUF_SIZE);
 	CopyMemory(val, (PVOID)pBuf, sizeof(Values));
 	UnmapViewOfFile(pBuf);
+
 }
 
 double Point::getX() {
