@@ -39,15 +39,11 @@ Point::Point(double x, double y)
 }
 
 void Point::setX(double x) {
-	EnterCriticalSection(&cs);
 	val->x = x;
-	LeaveCriticalSection(&cs);
 }
 
 void Point::setY(double y) {
-	EnterCriticalSection(&cs);
 	val->y = y;
-	LeaveCriticalSection(&cs);
 }
 
 void Point::sendStruct()
