@@ -22,5 +22,6 @@ private:
 	TCHAR szName[26] = TEXT("Global\MyFileMappingObject");
 	LPCTSTR pBuf;
 	pValues val;
+	CRITICAL_SECTION cs;
 };
 

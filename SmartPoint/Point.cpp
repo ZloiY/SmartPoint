@@ -17,6 +17,7 @@ Point::Point()
 	hMapFile = OpenFileMapping(FILE_MAP_ALL_ACCESS,
 		FALSE,
 		szName);
+	InitializeCriticalSection(&cs);
 }
 
 Point::Point(double x, double y)
@@ -34,18 +35,24 @@ Point::Point(double x, double y)
 	hMapFile = OpenFileMapping(FILE_MAP_ALL_ACCESS,
 		FALSE,
 		szName);
+	InitializeCriticalSection(&cs);
 }
 
 void Point::setX(double x) {
+	EnterCriticalSection(&cs);
 	val->x = x;
+	LeaveCriticalSection(&cs);
 }
 
 void Point::setY(double y) {
+	EnterCriticalSection(&cs);
 	val->y = y;
+	LeaveCriticalSection(&cs);
 }
 
 void Point::sendStruct()
 {
+	EnterCriticalSection(&cs);
 	pBuf = (LPTSTR)MapViewOfFile(hMapFile,
 		FILE_MAP_ALL_ACCESS,
 		0,
@@ -53,11 +60,13 @@ void Point::sendStruct()
 		BUF_SIZE);
 	CopyMemory((PVOID)pBuf, val, sizeof(Values));
 	UnmapViewOfFile(pBuf);
+	LeaveCriticalSection(&cs);
 
 }
 
 void Point::getStruct()
 {
+	EnterCriticalSection(&cs);
 	pBuf = (LPTSTR)MapViewOfFile(hMapFile,
 		FILE_MAP_ALL_ACCESS,
 		0,
@@ -65,7 +74,7 @@ void Point::getStruct()
 		BUF_SIZE);
 	CopyMemory(val, (PVOID)pBuf, sizeof(Values));
 	UnmapViewOfFile(pBuf);
-
+	LeaveCriticalSection(&cs);
 }
 
 double Point::getX() {
@@ -78,6 +87,7 @@ double Point::getY() {
 
 Point::~Point()
 {
+	DeleteCriticalSection(&cs);
 	CloseHandle(hMapFile);
 	delete val;
 }
